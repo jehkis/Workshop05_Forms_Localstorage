@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="fi">
-<head>
+<head
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Workshop 5: Eläinlomakkeet ja localStorage</title>
@@ -62,10 +62,19 @@
   </div>
   <p id="savedAnimal" class="saved" role="status">Tallennetun eläimen tiedot näkyvät tässä.</p>
   <p>Bonus: tallenna useita eläimiä taulukkoon. Palauta lista sivun päivityksen jälkeen ja lisää jokaiselle eläimelle poistopainike.</p>
+  <h3>Bonus: kaikki tallennetut eläimet</h3>
+  <ul id="animalList" class="animal-list"></ul>
 </section>
 <section>
   <h2>Pohdinta: sessionStorage ja localStorage</h2>
   <p>Kokeile sessionStoragea avaimella ws05SessionAnimal. Tallenna eläin, päivitä sivu ja sulje sitten välilehti. Avaa sivu uudessa välilehdessä ja vertaa tulosta localStorageen. Keksi kummallekin käyttötapaus.</p>
+  <p id="sessionAnimal" class="saved" role="status"></p>
+  <h3>Oma vertailuni</h3>
+  <ul>
+    <li><strong>localStorage</strong> säilyttää tiedot myös selaimen sulkemisen jälkeen. Ne poistuvat vain koodilla tai käyttäjän toimesta. Käyttötapaus: käyttäjän asetukset, kuten teema tai kieli, tai tallennettu lista, kuten tämä eläinmuistio.</li>
+    <li><strong>sessionStorage</strong> säilyy sivun päivityksen yli, mutta tiedot katoavat, kun välilehti suljetaan. Uusi välilehti aloittaa tyhjällä sessionStoragella. Käyttötapaus: keskeneräinen lomake tai monivaiheisen tilauksen nykyinen vaihe.</li>
+    <li>Molemmat tallentavat vain merkkijonoja, joten oliot tallennetaan JSON.stringify()-metodilla ja luetaan JSON.parse()-metodilla. Kumpaankaan ei pidä tallentaa salasanoja tai muuta arkaluonteista tietoa.</li>
+  </ul>
 </section>
 <footer><p>Hyödynnä oppimaasi Project 1:ssä. Aloita wireframesta ja yhdestä ydintoiminnosta.</p></footer>
 </main>

@@ -4,6 +4,8 @@
 
 const isFinnish = document.documentElement.lang === "fi";
 const STORAGE_KEY = "ws05Animal";
+const LIST_KEY = "ws05Animals";
+const SESSION_KEY = "ws05SessionAnimal";
 
 const messages = isFinnish
     ? {
@@ -22,7 +24,11 @@ const messages = isFinnish
         name: "Nimi",
         species: "Laji",
         note: "Muistio",
-        cleared: "Tallennettu eläin poistettu."
+        cleared: "Tallennettu eläin poistettu.",
+        emptyList: "Listalla ei ole vielä eläimiä.",
+        delete: "Poista",
+        sessionSaved: "sessionStoragessa (ws05SessionAnimal)",
+        noSession: "sessionStoragessa ei ole eläintä. Tallenna eläin, päivitä sivu ja kokeile sitten uutta välilehteä."
     }
     : {
         nameRequired: "Please enter the animal's name.",
@@ -40,7 +46,11 @@ const messages = isFinnish
         name: "Name",
         species: "Species",
         note: "Note",
-        cleared: "Saved animal cleared."
+        cleared: "Saved animal cleared.",
+        emptyList: "No animals in the list yet.",
+        delete: "Delete",
+        sessionSaved: "In sessionStorage (ws05SessionAnimal)",
+        noSession: "No animal in sessionStorage. Save an animal, refresh the page and then try a new tab."
     };
 
 const animalForm = document.getElementById("animalForm");
@@ -110,7 +120,17 @@ animalForm.addEventListener("submit", function (event) {
     const animal = { name, species, note };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(animal));
 
+    // Bonus: add to the array of all animals / Lisää kaikkien eläinten taulukkoon
+    const animals = readAnimalList();
+    animals.push(animal);
+    saveAnimalList(animals);
+
+    // Reflection: the same animal in sessionStorage / Sama eläin sessionStorageen
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(animal));
+
     loadAnimal();
+    renderAnimalList();
+    showSessionAnimal();
     animalForm.reset();
 });
 
@@ -198,5 +218,72 @@ clearButton.addEventListener("click", function () {
     savedAnimal.textContent = messages.cleared;
 });
 
+// Bonus: several animals in an array / Useita eläimiä taulukossa
+const animalList = document.getElementById("animalList");
+
+function readAnimalList() {
+    try {
+        const animals = JSON.parse(localStorage.getItem(LIST_KEY));
+        return Array.isArray(animals) ? animals : [];
+    } catch (error) {
+        return [];
+    }
+}
+
+function saveAnimalList(animals) {
+    localStorage.setItem(LIST_KEY, JSON.stringify(animals));
+}
+
+function renderAnimalList() {
+    const animals = readAnimalList();
+    animalList.innerHTML = "";
+
+    if (animals.length === 0) {
+        const item = document.createElement("li");
+        item.textContent = messages.emptyList;
+        animalList.appendChild(item);
+        return;
+    }
+
+    animals.forEach(function (animal, index) {
+        const item = document.createElement("li");
+        const text = document.createElement("span");
+        text.textContent = `${animal.name} (${animal.species}) – ${animal.note}`;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "secondary";
+        deleteButton.textContent = messages.delete;
+        deleteButton.setAttribute("aria-label", `${messages.delete}: ${animal.name}`);
+        deleteButton.addEventListener("click", function () {
+            const current = readAnimalList();
+            current.splice(index, 1);
+            saveAnimalList(current);
+            renderAnimalList();
+        });
+
+        item.append(text, deleteButton);
+        animalList.appendChild(item);
+    });
+}
+
+// Reflection: sessionStorage / Pohdinta: sessionStorage
+const sessionAnimal = document.getElementById("sessionAnimal");
+
+function showSessionAnimal() {
+    let animal = null;
+    try {
+        animal = JSON.parse(sessionStorage.getItem(SESSION_KEY));
+    } catch (error) {
+        animal = null;
+    }
+
+    sessionAnimal.textContent = animal
+        ? `${messages.sessionSaved}: ${animal.name} (${animal.species})`
+        : messages.noSession;
+}
+
 // Restore data when the page opens / Palauta tiedot sivun avautuessa
 loadAnimal();
+renderAnimalList();
+showSessionAnimal();

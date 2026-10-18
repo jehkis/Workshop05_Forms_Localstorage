@@ -36,6 +36,12 @@ button:hover { background: #104b3d; }
 .error { display: block; color: #b42318; font-size: .95rem; }
 .invalid { border: 2px solid #b42318; }
 .saved { padding: 16px; background: #edf4f0; border-radius: 6px; white-space: pre-line; }
+.animal-list { list-style: none; padding: 0; }
+.animal-list li {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 14px; background: #edf4f0; border-radius: 6px;
+}
+.animal-list button { margin-top: 0; padding: 6px 12px; }
 footer { color: #52635d; }
 @media (max-width: 600px) {
   body { padding: 14px; }

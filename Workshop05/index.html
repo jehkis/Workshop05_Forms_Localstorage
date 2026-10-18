@@ -62,10 +62,19 @@
   </div>
   <p id="savedAnimal" class="saved" role="status">Saved animal details will appear here.</p>
   <p>Bonus: save several animals in an array. Restore the list after refreshing and add a delete button for each animal.</p>
+  <h3>Bonus: all saved animals</h3>
+  <ul id="animalList" class="animal-list"></ul>
 </section>
 <section>
   <h2>Reflection: sessionStorage and localStorage</h2>
   <p>Try sessionStorage instead, using the key ws05SessionAnimal. Save an animal, refresh the page, then close the tab and open the page again in a new tab. Compare this with localStorage. Suggest a use for each.</p>
+  <p id="sessionAnimal" class="saved" role="status"></p>
+  <h3>My comparison</h3>
+  <ul>
+    <li><strong>localStorage</strong> keeps the data even after the browser is closed. It is removed only by code or by the user. Use: user settings such as theme or language, or a saved list like the animal notebook.</li>
+    <li><strong>sessionStorage</strong> survives a page refresh, but the data disappears when the tab is closed. A new tab starts with empty sessionStorage. Use: a half-filled form or the current step of a multi-page order.</li>
+    <li>Both store only strings, so objects are saved with JSON.stringify() and read with JSON.parse(). Neither should be used for passwords or other sensitive data.</li>
+  </ul>
 </section>
 <footer><p>Use what you learn in Project 1. Start with a wireframe and one core feature.</p></footer>
 </main>
